@@ -17,7 +17,17 @@ class OrderController extends Controller
 
         return response()->json([
             'message' => 'Orders retrieved successfully',
-            'data' => $order,
+            'data' => $order->load('orderProducts'),
+        ], 200);
+    }
+
+    public function detail($id)
+    {
+        $order = Order::findOrFail($id);
+
+        return response()->json([
+            'message' => 'Order retrieved successfully',
+            'data' => $order->load('orderProducts'),
         ], 200);
     }
 
@@ -93,12 +103,12 @@ class OrderController extends Controller
     }
 
     // Delete existing order
-    public function delete($id) 
+    public function delete($id)
     {
         $order = Order::findOrFail($id);
 
         $order->delete();
-        
+
         return response()->json([
             'message' => 'Order deleted successfully',
         ], 200);
